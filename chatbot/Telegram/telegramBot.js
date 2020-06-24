@@ -10,7 +10,8 @@ const auditoriasService = require("../../db/Auditorias");
 const preguntasService = require("../../db/Preguntas");
 const respuestasService = require("../../db/Respuestas");
 const detalleAuditoriasService = require("../../db/Detalle_auditorias");
-
+const { text } = require("body-parser");
+const usuarioService = require("../../db/Usuarios")
 const users = []; //convert to database
 // replace the value below with the Telegram token you receive from @BotFather
 const token = config.TELEGRAMTOKEN;
@@ -33,21 +34,47 @@ bot.on("message", async (msg) => {
   const chatId = msg.chat.id;
   const sender = msg.from.id;
   const message = msg.text;
-  //check if user was registered
+  // check if user was registered
   saveUserInformation(msg);
   console.log("mensaje recibido: ", msg);
   await sendToDialogFlow(sender, message);
+  /* const card = {
+    title: 'Auditoría Smart',
+    image_url: 'https://www.decubica.com/wp-content/uploads/2018/04/objetivos-smart-proyecto-a-la-meta.png',
+    subtitle: 'Descripción del card',
+    buttons: [
+      {
+        text: 'boton url',
+        url: 'https://cloud.google.com/dialogflow'
+      }
+    ]
+  }
+  sendGenericMessage(sender, card) */
+  /* let replies = [
+    {
+      text: 'Si',
+      callback_data: 'Si'
+    },
+    {
+      text: 'No',
+      callback_data: 'No'
+    }
+  ]
+  sendQuickReply(sender, '¿Existen observaciones?', replies) */
 });
 
 function saveUserInformation(msg) {
   let userId = msg.from.id;
+  const nombres = msg.from.first_name
+  const apellidos = msg.from.last_name
   console.log("empezando a guardar");
   if (users.findIndex((user) => user.id === userId) === -1) {
     users.push({
       id: userId,
-      first_name: msg.from.first_name,
-      last_name: msg.from.last_name,
+      first_name: nombres,
+      last_name: apellidos,
     });
+    usuarioService.addUser(nombres, apellidos, userId)
     console.log("se guardo...", users);
   }
 }
@@ -95,6 +122,9 @@ async function handleDialogFlowAction(
     preguntas,
     ordenPregunta;
   switch (action) {
+    case "Test-Intent.action":
+      sendTextMessage(sender, "Este mensaje fue enviado desde el código.");
+      break;
     case "EmpezarAuditoria.action":
       await handleMessages(messages, sender);
       await sendToDialogFlow(sender, "ListarCuestionarios");
