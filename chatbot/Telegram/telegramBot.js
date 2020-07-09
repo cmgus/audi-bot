@@ -123,7 +123,7 @@ async function handleDialogFlowAction(
     ordenPregunta;
   switch (action) {
     case "Test-Intent.action":
-      sendTextMessage(sender, "Este mensaje fue enviado desde el código.");
+      sendTextMessage(sender, "Si funca.");
       break;
     case "EmpezarAuditoria.action":
       await handleMessages(messages, sender);
