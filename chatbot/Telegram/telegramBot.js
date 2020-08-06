@@ -15,7 +15,10 @@ const usuarioService = require("../../db/Usuarios")
 const users = []; //convert to database
 // replace the value below with the Telegram token you receive from @BotFather
 const token = config.TELEGRAMTOKEN;
-
+// Me
+const path = require('path')
+const upload = require('../drive/upload')
+const makeInforme = require('../jspdf/index')
 // Create a bot that uses 'polling' to fetch new updates
 const bot = new TelegramBot(token, {
   polling: true,
@@ -252,6 +255,17 @@ async function handleDialogFlowAction(
         );
         await sendTextMessage(sender, "Guardado en base de datos... ");
         sendToDialogFlow(sender, `pregunta ${ordenPreguntaActual + 1}`);
+      }
+      break;
+    case 'Get-Informe.action':
+      try {
+        await handleMessages(messages, sender)
+        const out = await makeInforme()
+        const data = await upload(out)
+        console.log(data.name)
+        await sendTextMessage(sender, `El reporte ha sido generado:\n1. <b>${data.name}</b>`)
+      } catch (error) {
+        console.log('Hubo un error', error.message)
       }
       break;
     default:

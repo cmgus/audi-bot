@@ -5,7 +5,7 @@ const app = express();
 //public path
 app.use(express.static(__dirname + "/public"));
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3002;
 //environment variables
 require("dotenv").config();
 
