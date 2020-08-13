@@ -26,6 +26,11 @@ app.get("/", async (req, res) => {
   res.json({ message: "Chatbot Online!" });
 });
 
+app.get("/oauth2callback", async (req, res, next) => {
+  console.log(req.url);
+  neext()
+})
+
 app.listen(port, () => {
   console.log(`Escuchando peticiones en el puerto ${port}`);
 });
