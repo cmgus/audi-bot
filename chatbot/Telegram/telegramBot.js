@@ -258,15 +258,20 @@ async function handleDialogFlowAction(
       }
       break;
     case 'Get-Informe.action':
-      try {
+      await makeInforme()
+      await sendTextMessage(sender, "Informe generado");
+      await sendTextMessage(sender, "Para ver los resultados dirigirse a una de la siguientes url:");
+      await sendTextMessage(sender, "local: http://127.0.0.1:3002/pdf");
+      await sendTextMessage(sender, "heroku: https://robit-bot.herokuapp.com/pdf");
+      /* try {
         await handleMessages(messages, sender)
         const out = await makeInforme()
-        const data = await upload(out)
+        // const data = await upload(out)
         console.log(data.name)
         await sendTextMessage(sender, `El reporte ha sido generado:\n1. <b>${data.name}</b>`)
       } catch (error) {
         console.log('Hubo un error', error.message)
-      }
+      } */
       break;
     default:
       console.log(

@@ -1,7 +1,8 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
-
+const { join } = require('path')
+const { generar } = require('./db/Informe')
 //public path
 app.use(express.static(__dirname + "/public"));
 
@@ -26,9 +27,13 @@ app.get("/", async (req, res) => {
   res.json({ message: "Chatbot Online!" });
 });
 
-app.get("/oauth2callback", async (req, res, next) => {
-  console.log(req.url);
-  neext()
+app.get("/pdf", async (req, res) => {
+  /* const data = await generar()
+  console.log(data) */
+  res.sendFile(join(__dirname, '.tmp/reporte.pdf'), err => {
+    if (err) return console.log(err)
+    console.log('Send reporte')
+  })
 })
 
 app.listen(port, () => {
